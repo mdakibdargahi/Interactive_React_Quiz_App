@@ -16,7 +16,12 @@ const QuizProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/api.php?amount=10&type=multiple");
+      const apiUrl =
+        import.meta.env.MODE === "production"
+          ? "https://opentdb.com/api.php?amount=10&type=multiple"
+          : "/api/api.php?amount=10&type=multiple";
+      const response = await fetch(apiUrl);
+      //   const response = await fetch("/api/api.php?amount=10&type=multiple");
       if (response.status === 429)
         throw new Error("Rate limit exceeded. Wait 5s.");
       if (!response.ok) throw new Error("Network response was not ok");
